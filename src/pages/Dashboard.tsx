@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ProfileForm from "../components/Dashboard.jsx/ProfileForm";
+import useStore from "./../store/store";
 const Dashboard = (props: any) => {
   const {
     setLoggedInStatus,
@@ -12,10 +13,13 @@ const Dashboard = (props: any) => {
     loadingStatus,
   } = props;
   const navigate = useNavigate();
+  const userD = useStore((state) => state.user);
   useEffect(() => {
     if (!loadingStatus && loggedInStatus === "NOT_LOGGED_IN") {
       checkLoginStatus();
     }
+    console.log(userD, "ff");
+
     // if (!loadingStatus && loggedInStatus === "NOT_LOGGED_IN") {
     // //   navigate("/admin");
     // }

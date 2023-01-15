@@ -8,14 +8,16 @@ import axios from "axios";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Welcome from "./pages/Welcome";
+import useStore from "./store/store";
 
 const App: React.FC = () => {
   const [loggedInStatus, setLoggedInStatus] = useState("NOT_LOGGED_IN");
   const [user, setUser] = useState({});
   const [loadingStatus, setLoadingStatus] = useState(false);
+  const setUserD = useStore((state) => state.setUser);
+  // const navigate = useNavigate();
   const checkLoginStatus = () => {
     setLoadingStatus(true);
-    // const { path, navigate } = props;
     axios
       .get("http://localhost:3000/logged_in", { withCredentials: true })
       .then((response) => {
@@ -23,6 +25,7 @@ const App: React.FC = () => {
         if (response.data.logged_in && loggedInStatus === "NOT_LOGGED_IN") {
           setLoggedInStatus("LOGGED_IN");
           setUser(response.data.user);
+          setUserD(response.data.user);
           // navigate("/admin/dashboard");
         } else if (!response.data.logged_in && loggedInStatus === "LOGGED_IN") {
           setLoggedInStatus("NOT_LOGGED_IN");
