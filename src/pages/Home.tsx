@@ -18,13 +18,12 @@ const Home = (props: any) => {
     props.history.push("/dashboard", navigate);
   };
   useEffect(() => {
-    if (!loadingStatus && loggedInStatus === "NOT_LOGGED_IN") {
-      checkLoginStatus("/admin");
-    } else {
-      console.log(loggedInStatus);
-
-      navigate("/admin/dashboard");
-    }
+    // if (!loadingStatus && loggedInStatus === "NOT_LOGGED_IN") {
+    //   checkLoginStatus("/admin");
+    // } else {
+    //   console.log(loggedInStatus);
+    //   navigate("/admin/dashboard");
+    // }
   }, [loadingStatus]);
   return (
     <div>

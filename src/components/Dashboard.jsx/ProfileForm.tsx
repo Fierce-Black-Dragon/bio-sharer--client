@@ -1,60 +1,76 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function UpdateForm() {
-  const [avatar, setAvatar] = useState();
-  const [fullName, setFullName] = useState("");
-  const [info, setInfo] = useState("");
+interface Props {
+  currentUser: any; // This should be the current user object
+}
 
-  const handleSubmit = (e) => {
+const ProfileForm: React.FC<Props> = ({ currentUser }) => {
+  const [fullName, setFullName] = useState(currentUser.full_name);
+  const [info, setInfo] = useState(currentUser.info);
+  const [avatar, setAvatar] = useState(null);
+  console.log(currentUser);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!avatar) {
+      return;
+    }
     const formData = new FormData();
+    formData.append("id", currentUser.id);
     formData.append("avatar", avatar);
     formData.append("full_name", fullName);
     formData.append("info", info);
 
-    axios
-      .patch("/update", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/profile_update",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (res.status === 200) {
+        // handle success
+        alert("yeaaa");
+      } else {
+        // handle error
+        console.error("fff", res);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        Avatar:
-        <input type="file" onChange={(e) => setAvatar(e.target.files[0])} />
-      </label>
+      <label htmlFor="fullName">Full Ncame:</label>
+      <input
+        type="text"
+        id="fullName"
+        value={fullName}
+        onChange={(e) => setFullName(e.target.value)}
+      />
       <br />
-      <label>
-        Full Name:
-        <input
-          type="text"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-      </label>
+      <label htmlFor="info">Info:</label>
+      <textarea
+        id="info"
+        value={info}
+        onChange={(e) => setInfo(e.target.value)}
+      />
       <br />
-      <label>
-        Info:
-        <input
-          type="text"
-          value={info}
-          onChange={(e) => setInfo(e.target.value)}
-        />
-      </label>
+      <label htmlFor="avatar">Avatar:</label>
+      <input
+        type="file"
+        id="avatar"
+        onChange={(e: any) => setAvatar(e.target.files[0])}
+      />
       <br />
-      <button type="submit">Update</button>
+      <button type="submit">Save Changes</button>
     </form>
   );
-}
+};
 
-export default UpdateForm;
+export default ProfileForm;
