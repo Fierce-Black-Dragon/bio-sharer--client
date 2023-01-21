@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import axios from "axios";
+import useStore from "./../../store/store";
+import { useNavigate } from "react-router-dom";
 
-type Props = {
-  handleSuccessfulAuth: (data: any) => void;
-};
-
-const Auth: React.FC<Props> = (props) => {
+const Auth: React.FC = () => {
+  const {
+    user,
+    visitedUser,
+    loggedInStatus,
+    setUser,
+    setVisitedUSer,
+    setLoggedInStatus,
+  } = useStore((state) => state);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUserName] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [registrationErrors, setRegistrationErrors] = useState("");
-
+  const navigate = useNavigate();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     switch (event.target.name) {
       case "username":
@@ -47,7 +53,8 @@ const Auth: React.FC<Props> = (props) => {
       )
       .then((response) => {
         if (response.data.status === "created") {
-          props.handleSuccessfulAuth(response.data);
+          setUser(response.data);
+          navigate("/admin/dashboard");
         }
       })
       .catch((error) => {

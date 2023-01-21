@@ -1,17 +1,39 @@
-import create from "zustand";
+import { create } from "zustand";
+import { User } from "../types";
 
 interface StoreState {
-  user: object;
-  vistedUser: object;
-  setUser: (nUser: object) => void;
-  setVisitedUSer: (userD: object) => void;
+  user: User;
+  visitedUser: User;
+  loggedInStatus: boolean;
+  setUser: (nUser: User) => void;
+  setVisitedUSer: (userD: User) => void;
+  setLoggedInStatus: (status: boolean) => void;
 }
 
 const useStore = create<StoreState>()((set) => ({
-  user: {},
-  vistedUser: {},
-  setUser: (nUser) => set((state) => ({ user: nUser })),
-  setVisitedUSer: (userD: any) => set((state) => ({ vistedUser: userD })),
+  user: {
+    email: "",
+    full_name: "",
+    id: 0,
+    image_url: "",
+    info: "",
+    username: "",
+  },
+  visitedUser: {
+    email: "",
+    full_name: "",
+    id: 0,
+    image_url: "",
+    info: "",
+    username: "",
+  },
+  loggedInStatus: false,
+  setUser: (nUser) => set(() => ({ user: nUser })),
+  setVisitedUSer: (userD) => set(() => ({ visitedUser: userD })),
+  setLoggedInStatus: (status) =>
+    set((state) => ({
+      loggedInStatus: status,
+    })),
 }));
 
 export default useStore;

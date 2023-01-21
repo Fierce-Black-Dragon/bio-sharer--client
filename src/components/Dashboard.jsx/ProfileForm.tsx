@@ -1,26 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import useStore from "./../../store/store";
 
-interface Props {
-  currentUser: any; // This should be the current user object
-}
-
-const ProfileForm: React.FC<Props> = ({ currentUser }) => {
-  const [fullName, setFullName] = useState(currentUser.full_name);
-  const [info, setInfo] = useState(currentUser.info);
-  const [avatar, setAvatar] = useState(null);
-  console.log(currentUser);
+const ProfileForm: React.FC = () => {
+  const {
+    user,
+    vistedUser,
+    loggedInStatus,
+    setUser,
+    setVisitedUSer,
+    setLoggedInStatus,
+  } = useStore((state) => state);
+  const [currentUser, setCurrent] = useState();
+  const [fullName, setFullName] = useState("");
+  const [info, setInfo] = useState("");
+  const [avatar, setAvatar] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!avatar) {
-      return;
-    }
+
     const formData = new FormData();
-    formData.append("id", currentUser.id);
-    formData.append("avatar", avatar);
+
+    if (avatar) {
+      formData.append("avatar", avatar);
+    }
     formData.append("full_name", fullName);
     formData.append("info", info);
+    // formData.append("id", user.id);
 
     try {
       const res = await axios.post(
@@ -43,32 +49,46 @@ const ProfileForm: React.FC<Props> = ({ currentUser }) => {
       console.error(err);
     }
   };
+  useEffect(() => {
+    if (user) {
+      setFullName(user.full_name);
+      setInfo(user.info);
+    }
+  }, [loggedInStatus]);
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="fullName">Full Ncame:</label>
-      <input
-        type="text"
-        id="fullName"
-        value={fullName}
-        onChange={(e) => setFullName(e.target.value)}
-      />
-      <br />
-      <label htmlFor="info">Info:</label>
-      <textarea
-        id="info"
-        value={info}
-        onChange={(e) => setInfo(e.target.value)}
-      />
-      <br />
-      <label htmlFor="avatar">Avatar:</label>
-      <input
-        type="file"
-        id="avatar"
-        onChange={(e: any) => setAvatar(e.target.files[0])}
-      />
-      <br />
-      <button type="submit">Save Changes</button>
+      {user !== undefined ? (
+        <>
+          {user.username}
+          <br />
+          <label htmlFor="fullName">Full Ncame:</label>
+          <input
+            type="text"
+            id="fullName"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+          />
+          <br />
+          <label htmlFor="info">Info:</label>
+          <textarea
+            id="info"
+            value={info}
+            onChange={(e) => setInfo(e.target.value)}
+          />
+          <br />
+          <label htmlFor="avatar">Avatar:</label>
+          <input
+            type="file"
+            id="avatar"
+            onChange={(e: any) => setAvatar(e.target.files[0])}
+          />
+          <br />
+          <button type="submit">Save Changes</button>
+        </>
+      ) : (
+        "loading"
+      )}
     </form>
   );
 };

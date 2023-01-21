@@ -1,25 +1,16 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { checkLoginStatus } from "./../api/index";
 
 const Welcome = (props: any) => {
-  const {
-    setLoggedInStatus,
-    loggedInStatus,
-    setUser,
-    user,
-    checkLoginStatus,
-    loadingStatus,
-  } = props;
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!loadingStatus && loggedInStatus === "NOT_LOGGED_IN") {
-      checkLoginStatus();
-    } else {
-      navigate("/admin/dashboard");
-    }
-  }, [loadingStatus]);
-
-  return <div>{loadingStatus ? <h3>loading...</h3> : <h3>Welcome</h3>}</div>;
+  return (
+    <div>
+      {" "}
+      <h3>Welcome</h3>
+      <Link to={"/admin"}>login</Link>
+    </div>
+  );
 };
 
 export default Welcome;
