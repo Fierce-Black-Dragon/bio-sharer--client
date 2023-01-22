@@ -18,6 +18,7 @@ const useStore = create<StoreState>()((set) => ({
     image_url: "",
     info: "",
     username: "",
+    links: [],
   },
   visitedUser: {
     email: "",
@@ -26,6 +27,7 @@ const useStore = create<StoreState>()((set) => ({
     image_url: "",
     info: "",
     username: "",
+    links: [],
   },
   loggedInStatus: false,
   setUser: (nUser) => set(() => ({ user: nUser })),

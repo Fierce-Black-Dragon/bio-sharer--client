@@ -20,7 +20,7 @@ const Home = () => {
   // };
   const {
     user,
-    vistedUser,
+    visitedUser,
     loggedInStatus,
     setUser,
     setVisitedUSer,
@@ -28,21 +28,13 @@ const Home = () => {
   } = useStore((state) => state);
   const navigate = useNavigate();
   useEffect(() => {
-    if (loggedInStatus === "LOGGED_IN") {
+    if (loggedInStatus) {
       navigate("/admin/dashboard");
     }
   }, [loggedInStatus]);
   return (
     <div>
-      {/* {loadingStatus ? (
-        <h3>loading....</h3>
-      ) : (
-        <>
-          <h1>Status: {props.loggedInStatus}</h1>
-          <Auth handleSuccessfulAuth={handleSuccessfulAuth} />
-        </>
-      )} */}
-      login
+      <Auth />
     </div>
   );
 };

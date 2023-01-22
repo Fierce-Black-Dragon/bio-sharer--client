@@ -32,6 +32,13 @@ export const registerUSer = async (user: NewUser) => {
   );
 };
 
+export const getVisitedUserData = async (username: string) => {
+  const response = await api.get(`/dashboard/${username}`, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
 // export const deleteTodo = async ({ id }) => {
 //   return await todosApi.delete(`/todos/${id}`, id);
 // };

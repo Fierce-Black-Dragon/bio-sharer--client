@@ -4,11 +4,16 @@ import Welcome from "../pages/Welcome";
 import Home from "../pages/Home";
 import Protected from "../pages/sub/Protected";
 import UnAuthenticated from "../pages/sub/unAuthenticated";
+import User from "../pages/User";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Welcome />,
+    element: (
+      <UnAuthenticated>
+        <Welcome />
+      </UnAuthenticated>
+    ),
   },
   {
     path: "/admin",
@@ -25,6 +30,10 @@ const router = createBrowserRouter([
         <Dashboard />
       </Protected>
     ),
+  },
+  {
+    path: ":username",
+    element: <User />,
   },
 ]);
 
